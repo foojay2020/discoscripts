@@ -9,7 +9,10 @@ infoFunction() {
     echo "#       disco-bundles.sh       #"
     echo "#                              #"
     echo "################################"
-    echo 
+    echo
+    echo
+    echo "Be aware that you need to have jq and wget installed"
+    echo
     echo "Script parameters:"
     echo "--help          : Shows this info"
     echo "--os            : Operating System  (mandatory)               e.g. windows, macos, linux"
