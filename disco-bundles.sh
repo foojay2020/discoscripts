@@ -241,9 +241,11 @@ if [[ "$noOfEntries" > 1 ]]; then
     response=${response:l} # bash version: response=${response,,}
     echo 
 elif [[ "$noOfEntries" = 1 ]]; then
+    echo
     echo "Exactly one bundle found that matches the given parameters"
     echo
 else
+    echo
     echo "Sorry no bundles found that matches the given parameters"
     exit 1
 fi
