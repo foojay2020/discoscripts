@@ -10,6 +10,9 @@ infoFunction() {
     echo "#                              #"
     echo "################################"
     echo 
+    echo
+    echo "Be aware that you need to have jq installed"
+    echo
     echo "Script parameters:"
     echo "--help          : Shows this info"
     echo "--release       : Release  e.g. 1, 5, 9, 11, 18"
