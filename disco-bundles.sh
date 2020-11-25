@@ -12,19 +12,19 @@ infoFunction() {
     echo 
     echo "Script parameters:"
     echo "--help          : Shows this info"
-    echo "--os            : Operating System  (mandatory) e.g. windows, macos, linux"
-    echo "--version       : Version           (mandatory) e.g. 1.8.0_265 or 11 or 13.0.5.1"
-    echo "--ext           : File extension                e.g. cab,deb,dmg,msi,pkg,rpm,src_tar,tar,zip"
-    echo "--arch          : Architecture                  e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
-    echo "--distro        : Distribution                  e.g. adopt, dragonwell, corretto, liberica, open_jdk, sap_machine, zulu"
-    echo "--bitness       : Bitness                       e.g. 32, 64"
-    echo "--bundle_type   : Bundle type                   e.g. jre, jdk"
-    echo "--release_status: Release status                e.g. ea, ga"
-    echo "--support_term  : Support term                  e.g. sts, mts, lts"
-    echo "--fx            : With JavaFX                   e.g. true, false"
-    echo "--release       : Release                       e.g. latest, next, previous, latest_sts, latest_mts, latest_lts"
-    echo "--latest        : Latest                        e.g. overall, per_distro"
-    echo "--dest          : Destination                   e.g. /Users/HanSolo"
+    echo "--os            : Operating System  (mandatory)               e.g. windows, macos, linux"
+    echo "--version       : Version           (mandatory or release)    e.g. 1.8.0_265 or 11 or 13.0.5.1"
+    echo "--release       : Release           (mandatory if no version) e.g. latest, next, previous, latest_sts, latest_mts, latest_lts"
+    echo "--ext           : File extension                              e.g. cab,deb,dmg,msi,pkg,rpm,src_tar,tar,zip"
+    echo "--arch          : Architecture                                e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
+    echo "--distro        : Distribution                                e.g. adopt, dragonwell, corretto, liberica, open_jdk, sap_machine, zulu"
+    echo "--bitness       : Bitness                                     e.g. 32, 64"
+    echo "--bundle_type   : Bundle type                                 e.g. jre, jdk"
+    echo "--release_status: Release status                              e.g. ea, ga"
+    echo "--support_term  : Support term                                e.g. sts, mts, lts"
+    echo "--fx            : With JavaFX                                 e.g. true, false"
+    echo "--latest        : Latest                                      e.g. overall, per_distro"
+    echo "--dest          : Destination                                 e.g. /Users/HanSolo"
     echo 
     echo "Usage example:"
     echo "disco-bundles.sh --dest /Users/Hansolo --os windows --version 1.8.0_265 --distro zulu --bundle_type jdk --arch x64 --ext zip --release_status ga"    
@@ -134,6 +134,10 @@ if [[ $versionValue ]]; then
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
 	url="${url}version=${versionValue}"
     let present="1"
+elif [[ $releaseValue ]]; then 
+    if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+    url="${url}release=${releaseValue}"
+    let present="1"
 else
     infoFunction
 fi
@@ -198,11 +202,12 @@ if [[ $supportTermValue ]]; then
     let present="1"
 fi
 
-if [[ $releaseValue ]]; then 
-	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}release=${releaseValue}"
-    let present="1"
-fi
+#if [[ $releaseValue ]]; then 
+#	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+#	url="${url}release=${releaseValue}"
+#    let present="1"
+#    echo $url
+#fi
 
 if [[ $fxValue ]]; then 
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
