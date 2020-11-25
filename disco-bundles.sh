@@ -181,7 +181,7 @@ if [[ $bitnessValue ]]; then
 fi
 
 if [[ $bundleTypeValue ]]; then 
-	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+    if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
 	url="${url}bundle_type=${bundleTypeValue}"
     let present="1"
 fi
@@ -231,9 +231,16 @@ json="$(curl ${url} 2>/dev/null)"
 
 noOfEntries=$(echo ${json} | jq length)
 if [[ "$noOfEntries" > 1 ]]; then
-    read -r -p "Found more than 1 bundle, download only the first one (Y/n)? " response
+    echo
+    read -r -p "Found ${noOfEntries} bundles, would you like to select the first one only (Y/n)? " response
     response=${response:l} # bash version: response=${response,,}
     echo 
+elif [[ "$noOfEntries" = 1 ]]; then
+    echo "Exactly one bundle found that matches the given parameters"
+    echo
+else
+    echo "Sorry no bundles found that matches the given parameters"
+    exit 1
 fi
 
 
