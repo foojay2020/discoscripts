@@ -18,6 +18,8 @@ infoFunction() {
     echo "--release       : Release  e.g. 1, 5, 9, 11, 18"
     echo 
     echo "disco-releases.sh"
+    echo "disco-releases.sh --maintained"
+    echo "disco-releases.sh --supported"
     echo "disco-releases.sh --release 5"
     echo "disco-releases.sh --help"
     echo
@@ -38,6 +40,14 @@ while [ $# -gt 0 ]; do
           infoFunction
         fi
 
+        if [ "$1" == "--maintained" ]; then
+          declare maintained=true
+        fi
+
+        if [ "$1" == "--supported" ]; then
+          declare supported=true
+        fi
+
         if [ "$param" = "$releaseField" ]; then
         	declare releaseValue=$2
         fi
@@ -49,10 +59,14 @@ done
 # CALL THE DISCOAPI
 url="http://81.169.252.235:8080/disco/v1.0/releases"
 
-if [[ $releaseValue ]]; then 	
-	url="${url}/${releaseValue}"
-    let present="1"
+if [[ $maintained ]]; then    
+    url="${url}/maintained"    
+elif [[ $supported ]]; then    
+    url="${url}/supported"
+elif [[ $releaseValue ]]; then  
+    url="${url}/${releaseValue}"
 fi
+
 
 #echo $url
 
