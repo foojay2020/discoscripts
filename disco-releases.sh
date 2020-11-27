@@ -14,8 +14,8 @@ infoFunction() {
     echo "Be aware that you need to have jq installed"
     echo
     echo "Script parameters:"
-    echo "--help          : Shows this info"
-    echo "--release       : Release  e.g. 1, 5, 9, 11, 18"
+    echo "--help    : Shows this info"
+    echo "--release : Release  e.g. 1, 5, 9, 11, 18"
     echo 
     echo "disco-releases.sh"
     echo "disco-releases.sh --maintained"
