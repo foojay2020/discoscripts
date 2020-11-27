@@ -14,7 +14,8 @@ infoFunction() {
     echo "Be aware that you need to have jq installed"
     echo
     echo "Script parameters:"
-    echo "--help  : Shows this info"    
+    echo "--version : Returns a list of distributions that support the given version"
+    echo "--help    : Shows this info"    
     echo 
     echo "disco-distributions.sh"
     echo "disco-releases.sh --help"
@@ -22,15 +23,42 @@ infoFunction() {
     exit 1
 }
 
-if [ "$1" == "--help" ]; then
-  infoFunction
-fi
+
+# FIELDS
+versionField="version"
+
+
+# CHECK FOR GIVEN PARAMETERS
+while [ $# -gt 0 ]; do
+
+   if [[ $1 == *"--"* ]]; then
+        param="${1/--/}"
+        declare $param=$2
+    
+        if [ "$param" = "$versionField" ]; then
+            declare versionValue=$2        
+        fi
+
+        if [ "$1" == "--help" ]; then
+          infoFunction
+        fi
+   fi
+
+  shift
+done
+
 
 # CALL THE DISCOAPI
 url="http://81.169.252.235:8080/disco/v1.0/distributions"
 
+echo $versionValue
 
-#echo $url
+if [[ $versionValue ]]; then     
+    url="${url}/${versionValue}"    
+fi
+
+
+echo $url
 
 # READ REST RESPONSE INTO VARIABLE
 json="$(curl ${url} 2>/dev/null)"
