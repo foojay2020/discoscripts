@@ -18,6 +18,7 @@ infoFunction() {
     echo "--help    : Shows this info"    
     echo 
     echo "disco-distributions.sh"
+    echo "disco-distributions.sh --version 13.0.5.1"
     echo "disco-releases.sh --help"
     echo
     exit 1
