@@ -55,7 +55,7 @@ url="http://81.169.252.235:8080/disco/v1.0/distributions"
 echo $versionValue
 
 if [[ $versionValue ]]; then     
-    url="${url}/${versionValue}"    
+    url="${url}/versions/${versionValue}"    
 fi
 
 
