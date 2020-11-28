@@ -15,6 +15,7 @@ infoFunction() {
     echo
     echo "Script parameters:"
     echo "--version : Returns a list of distributions that support the given version"
+    echo "--name    : Returns a distribution with the given name if available"
     echo "--help    : Shows this info"    
     echo 
     echo "disco-distributions.sh"
@@ -27,6 +28,7 @@ infoFunction() {
 
 # FIELDS
 versionField="version"
+nameField="name"
 
 
 # CHECK FOR GIVEN PARAMETERS
@@ -38,6 +40,8 @@ while [ $# -gt 0 ]; do
     
         if [ "$param" = "$versionField" ]; then
             declare versionValue=$2        
+        elif [ "$param" = "$nameField" ]; then
+            declare nameValue=$2        
         fi
 
         if [ "$1" == "--help" ]; then
@@ -55,7 +59,9 @@ url="http://81.169.252.235:8080/disco/v1.0/distributions"
 echo $versionValue
 
 if [[ $versionValue ]]; then     
-    url="${url}/versions/${versionValue}"    
+    url="${url}/versions/${versionValue}"
+elif [[ $nameValue ]]; then     
+    url="${url}/${nameValue}"    
 fi
 
 
@@ -66,4 +72,4 @@ json="$(curl ${url} 2>/dev/null)"
 #echo $json
 
 # PRINT OUT
-echo "$json" | jq '.[]'    
+echo "$json" | jq
