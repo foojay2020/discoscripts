@@ -6,7 +6,7 @@ infoFunction() {
     echo "#                              #"
     echo "#   foojay jdk discovery api   #"
     echo "#                              #"
-    echo "#       disco-bundles.sh       #"
+    echo "#       disco-packages.sh      #"
     echo "#                              #"
     echo "################################"
     echo
@@ -14,23 +14,25 @@ infoFunction() {
     echo "Be aware that you need to have jq and wget installed"
     echo
     echo "Script parameters:"
-    echo "--help          : Shows this info"
-    echo "--os            : Operating System  (mandatory)               e.g. windows, macos, linux"
-    echo "--version       : Version           (mandatory or release)    e.g. 1.8.0_265 or 11 or 13.0.5.1"
-    echo "--release       : Release           (mandatory if no version) e.g. latest, next, previous, latest_sts, latest_mts, latest_lts"
-    echo "--ext           : File extension                              e.g. cab,deb,dmg,msi,pkg,rpm,src_tar,tar,zip"
-    echo "--arch          : Architecture                                e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
-    echo "--distro        : Distribution                                e.g. adopt, dragonwell, corretto, liberica, open_jdk, sap_machine, zulu"
-    echo "--bitness       : Bitness                                     e.g. 32, 64"
-    echo "--bundle_type   : Bundle type                                 e.g. jre, jdk"
-    echo "--release_status: Release status                              e.g. ea, ga"
-    echo "--support_term  : Support term                                e.g. sts, mts, lts"
-    echo "--fx            : With JavaFX                                 e.g. true, false"
-    echo "--latest        : Latest                                      e.g. overall, per_distro"
-    echo "--dest          : Destination                                 e.g. /Users/HanSolo"
+    echo "--help                  : Shows this info"
+    echo "--version               : Version                (mandatory or version by definition)  e.g. 1.8.0_265 or 11 or 13.0.5.1"
+    echo "--version_by_definition : Version by definition  (mandatory if no version)             e.g. latest, latest_sts, latest_mts, latest_lts"
+    echo "--distro                : Distribution                                e.g. adopt, azure_zulu, dragonwell, corretto, liberica, oracle_open_jdk, redhat, sap_machine, zulu"
+    echo "--architecture          : Architecture                                e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
+    echo "--archive_type          : File extension                              e.g. cab, deb, dmg, exe, msi, pkg, rpm, tar, zip"
+    echo "--package_type          : Package type                                e.g. jre, jdk"
+    echo "--operating_system      : Operating System  (mandatory)               e.g. windows, macos, linux"
+    echo "--libc_type             : Type of libc                                e.g. glibc, libc, musl, c_std_lib"           
+    echo "--release_status        : Release status                              e.g. ea, ga"
+    echo "--term_of_support       : Term of support                             e.g. sts, mts, lts"
+    echo "--bitness               : Bitness                                     e.g. 32, 64"
+    echo "--javafx_bundled        : With JavaFX                                 e.g. true, false"
+    echo "--directly_downloadable : Directly downloadable                       e.g. true, false"
+    echo "--latest                : Latest                                      e.g. overall, per_distro"
+    echo "--dest                  : Destination                                 e.g. /Users/HanSolo"
     echo 
     echo "Usage example:"
-    echo "disco-bundles.sh --dest /Users/Hansolo --os windows --version 1.8.0_265 --distro zulu --bundle_type jdk --arch x64 --ext zip --release_status ga"    
+    echo "disco-packages.sh --dest /Users/Hansolo --operating_system windows --version 1.8.0_265 --distro zulu --package_type jdk --architecture x64 --archive_type zip --release_status ga"
     echo
     exit 1
 }
@@ -41,16 +43,18 @@ destField="dest"
 versionField="version"
 fromVersionField="from_version"
 toVersionField="to_version"
-osField="os"
-extField="ext"
-archField="arch"
+operatingSystemField="operating_system"
+libcTypeField="libc_type"
+archiveTypeField="archive_type"
+architectureField="architecture"
 distroField="distro"
 bitnessField="bitness"
-bundleTypeField="bundle_type"
+packageTypeField="package_type"
 releaseStatusField="release_status"
 supportTermField="support_term"
-releaseField="release"
-fxField="fx"
+versionByDefinitionField="version_by_definition"
+directlyDownloadableField="directly_downloadable"
+javafxBundledField="javafx_bundled"
 latestField="latest"
 
 # CHECK FOR GIVEN PARAMETERS
@@ -80,16 +84,20 @@ while [ $# -gt 0 ]; do
         	declare toVersionValue=$2
         fi
 
-        if [ "$param" = "$osField" ]; then
-        	declare osValue=$2        	
+        if [ "$param" = "$operatingSystemField" ]; then
+        	declare operatingSystemValue=$2        	
         fi
 
-        if [ "$param" = "$extField" ]; then
-        	declare extValue=$2
+        if [ "$param" = "$libcTypeField" ]; then
+            declare libcTypeValue=$2         
         fi
 
-        if [ "$param" = "$archField" ]; then
-        	declare archValue=$2
+        if [ "$param" = "$archiveTypeField" ]; then
+        	declare archiveTypeValue=$2
+        fi
+
+        if [ "$param" = "$architectureField" ]; then
+        	declare architectureValue=$2
         fi
 
         if [ "$param" = "$distroField" ]; then
@@ -100,8 +108,8 @@ while [ $# -gt 0 ]; do
         	declare -i bitnessValue=$2
         fi
 
-        if [ "$param" = "$bundleTypeField" ]; then
-            declare bundleTypeValue=$2
+        if [ "$param" = "$packageTypeField" ]; then
+            declare packageTypeValue=$2
         fi
 
         if [ "$param" = "$releaseStatusField" ]; then
@@ -112,12 +120,16 @@ while [ $# -gt 0 ]; do
         	declare supportTermValue=$2
         fi
 
-        if [ "$param" = "$releaseField" ]; then
-        	declare releaseValue=$2
+        if [ "$param" = "$versionByDefinitionField" ]; then
+        	declare versionByDefinitionValue=$2
         fi
 
-        if [ "$param" = "$fxField" ]; then
-        	declare fxValue=$2
+        if [ "$param" = "$directlyDownloadableField" ]; then
+            declare directlyDownloadableValue=$2
+        fi
+
+        if [ "$param" = "$javafxBundledField" ]; then
+        	declare javafxBundledValue=$2
         fi
 
         if [ "$param" = "$latestField" ]; then
@@ -129,7 +141,7 @@ while [ $# -gt 0 ]; do
 done
 
 # CALL THE DISCOAPI
-url="http://81.169.252.235:8080/disco/v1.0/bundles"
+url="https://api.foojay.io/disco/v1.0/packages"
 present="0"
 
 
@@ -137,17 +149,17 @@ if [[ $versionValue ]]; then
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
 	url="${url}version=${versionValue}"
     let present="1"
-elif [[ $releaseValue ]]; then 
+elif [[ $versionByDefinitionValue ]]; then 
     if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-    url="${url}release=${releaseValue}"
+    url="${url}version_by_definition=${versionByDefinitionValue}"
     let present="1"
 else
     infoFunction
 fi
 
-if [[ $osValue ]]; then 
+if [[ $operatingSystemValue ]]; then 
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}os=${osValue}"
+	url="${url}operating_system=${operatingSystemValue}"
     # SET EXTENSION DEPENDENT ON THE OPERATING SYSTEM
     #if [[ $os -eq "windows" ]]; then
     #    url="${url}&ext=zip"
@@ -163,15 +175,21 @@ else
     infoFunction
 fi
 
-if [[ $extValue ]]; then 
-	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}ext=${extValue}"
+if [[ $libcTypeValue ]]; then 
+    if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+    url="${url}libc_type=${libcTypeValue}"
     let present="1"
 fi
 
-if [[ $archValue ]]; then 
+if [[ $archiveTypeValue ]]; then 
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}arch=${archValue}"
+	url="${url}archive_type=${archiveTypeValue}"
+    let present="1"
+fi
+
+if [[ $architectureValue ]]; then 
+	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+	url="${url}architecture=${architectureValue}"
     let present="1"
 fi
 
@@ -187,9 +205,9 @@ if [[ $bitnessValue ]]; then
     let present="1"
 fi
 
-if [[ $bundleTypeValue ]]; then 
+if [[ $packageTypeValue ]]; then 
     if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}bundle_type=${bundleTypeValue}"
+	url="${url}package_type=${packageTypeValue}"
     let present="1"
 fi
 
@@ -205,6 +223,12 @@ if [[ $supportTermValue ]]; then
     let present="1"
 fi
 
+if [[ $directlyDownloadableValue ]]; then 
+    if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+    url="${url}directly_downloadable=${directlyDownloadableValue}"
+    let present="1"
+fi
+
 #if [[ $releaseValue ]]; then 
 #	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
 #	url="${url}release=${releaseValue}"
@@ -212,9 +236,9 @@ fi
 #    echo $url
 #fi
 
-if [[ $fxValue ]]; then 
+if [[ $javafxBundledValue ]]; then 
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
-	url="${url}fx=${fxValue}"
+	url="${url}javafx_bundled=${javafxBundledValue}"
     let present="1"
 fi
 
@@ -233,33 +257,34 @@ json="$(curl ${url} 2>/dev/null)"
 
 
 # PRINT OUT
-#echo "$json" | jq -c '.[]|"\(.id) , \(.filename) , \(.download_link)"' 
+#echo "$json" | jq -c '.[]|"\(.id) , \(.filename) , \(.ephemeral_id)"' 
 
 #echo "$json" | jq -c '.[]|"\(.id)"' 
 
 noOfEntries=$(echo ${json} | jq length)
 if [[ "$noOfEntries" > 1 ]]; then
     echo
-    read -r -p "Found ${noOfEntries} bundles, would you like to select the first one only (Y/n)? " response
+    read -r -p "Found ${noOfEntries} packages, would you like to select the first one only (Y/n)? " response
     response=${response:l} # bash version: response=${response,,}
     echo 
 elif [[ "$noOfEntries" = 1 ]]; then
     echo
-    echo "Exactly one bundle found that matches the given parameters"
+    echo "Exactly one package found that matches the given parameters"
     echo
 else
     echo
-    echo "Sorry no bundles found that matches the given parameters"
+    echo "Sorry no packages found that matches the given parameters"
     exit 1
 fi
 
 
+ephemeralIdsUrl="https://api.foojay.io/disco/v1.0/ephemeral_ids/"
 #for k in $(jq '.[] | keys | .[]' <<< "$json"); do # iterate through keys of array
-for k in $(jq '.[] | .download_link' <<< "$json"); do
-    #echo $k
-    bundleInfoJson="$(curl "$(echo "$k" | tr -d \")" 2>/dev/null)"
-    filename="$(echo "$bundleInfoJson" | jq '.filename' | tr -d \")"
-    downloadLink="$(echo "$bundleInfoJson" | jq '.download_link' | tr -d \")"
+for k in $(jq '.[] | .ephemeral_id' <<< "$json"); do
+    dlUrl="${ephemeralIdsUrl}${k//\"}"    
+    packageInfoJson="$(curl "$(echo "$dlUrl" | tr -d \")" 2>/dev/null)"
+    filename="$(echo "$packageInfoJson" | jq '.filename' | tr -d \")"
+    downloadLink="$(echo "$packageInfoJson" | jq '.direct_download_uri' | tr -d \")"
     if [[ $destValue ]]; then
         filename="${destValue}/${filename}"
     fi
@@ -267,7 +292,7 @@ for k in $(jq '.[] | .download_link' <<< "$json"); do
     read -p "Download ${filename} (y/N) ?" -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo Download bundle to $filename
+        echo Download package to $filename
     #echo $filename $downloadLink
         wget -O $filename $downloadLink
     fi    
