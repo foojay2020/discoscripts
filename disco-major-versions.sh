@@ -18,11 +18,11 @@ infoFunction() {
     echo "--major-version : Major Version  e.g. 1, 5, 9, 11, 18"
     echo 
     echo "disco-major-versions.sh"
-    echo "disco-major-versions.sh --maintained"
-    echo "disco-major-versions.sh --ea"
-    echo "disco-major-versions.sh --ga"
-    echo "disco-major-versions.sh --version 11 --ea"
-    echo "disco-major-versions.sh --version 11 --ga"
+    echo "disco-major-versions.sh --maintained true --ea true --ga true"
+    echo "disco-major-versions.sh --ea true"
+    echo "disco-major-versions.sh --ga true"
+    echo "disco-major-versions.sh --version 11 --ea true"
+    echo "disco-major-versions.sh --version 11 --ga true"
     echo "disco-major-verions.sh --help"
     echo
     exit 1
