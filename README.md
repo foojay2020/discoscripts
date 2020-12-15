@@ -2,7 +2,7 @@
 
 A collection of scripts that make use of the foojay jdk discovery api.
 
-For help just execute the script without any parameter.
+For help just execute the script without the --help parameter.
 
 ATTENTION: You need to have jq and wget installed to run the scripts !!!
 
@@ -11,8 +11,8 @@ disco-packages.sh --help
 
 
 ## Get a list of available distributions
-disco-distributions.sh
+disco-distributions.sh --help
 
 
 ## Get a list of available major versions
-disco-major-versions.sh
+disco-major-versions.sh --help
