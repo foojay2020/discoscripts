@@ -18,6 +18,7 @@ infoFunction() {
     echo "--version               : Version                (mandatory or version by definition)  e.g. 1.8.0_265 or 11 or 13.0.5.1"
     echo "--version_by_definition : Version by definition  (mandatory if no version)             e.g. latest, latest_sts, latest_mts, latest_lts"
     echo "--distro                : Distribution                                e.g. adopt, azure_zulu, dragonwell, corretto, liberica, oracle_open_jdk, redhat, sap_machine, zulu"
+    echo "--jvm_implementation    : JVM Implementation                          e.g. hotspot, openj9"
     echo "--architecture          : Architecture                                e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
     echo "--archive_type          : File extension                              e.g. cab, deb, dmg, exe, msi, pkg, rpm, tar, zip"
     echo "--package_type          : Package type                                e.g. jre, jdk"
@@ -48,6 +49,7 @@ libcTypeField="libc_type"
 archiveTypeField="archive_type"
 architectureField="architecture"
 distroField="distro"
+jvmImplementationField="jvm_implementation"
 bitnessField="bitness"
 packageTypeField="package_type"
 releaseStatusField="release_status"
@@ -102,6 +104,10 @@ while [ $# -gt 0 ]; do
 
         if [ "$param" = "$distroField" ]; then
         	declare distroValue=$2
+        fi
+
+        if [ "$param" = "$jvmImplementationField" ]; then
+        	declare jvmImplementationValue=$2
         fi
 
 		if [ "$param" = "$bitnessField" ]; then
@@ -196,6 +202,12 @@ fi
 if [[ $distroValue ]]; then 
 	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
 	url="${url}distro=${distroValue}"
+    let present="1"
+fi
+
+if [[ $jvmImplementationValue ]]; then 
+	if [ $present -eq "1" ]; then url="${url}&"; else url="${url}?"; fi
+	url="${url}jvm_implementation=${jvmImplementationValue}"
     let present="1"
 fi
 
