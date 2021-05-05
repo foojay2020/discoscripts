@@ -17,7 +17,7 @@ infoFunction() {
     echo "--help                  : Shows this info"
     echo "--version               : Version                (mandatory or version by definition)  e.g. 1.8.0_265 or 11 or 13.0.5.1"
     echo "--version_by_definition : Version by definition  (mandatory if no version)             e.g. latest, latest_sts, latest_mts, latest_lts"
-    echo "--distro                : Distribution                                e.g. aoj, aoj_openj9, dragonwell, corretto, liberica, oracle_open_jdk, redhat, sap_machine, zulu"
+    echo "--distro                : Distribution                                e.g. aoj, aoj_openj9, dragonwell, corretto, liberica, microsoft, ojdk_build, openlogic, oracle_open_jdk, sap_machine, temurin, trava, zulu"
     echo "--architecture          : Architecture                                e.g. aarch64, arm, arm64, mips, ppc, ppc64, ppc64le, riscv64, s390x, sparc, sparcv9, x64, x86, amd64"
     echo "--archive_type          : File extension                              e.g. cab, deb, dmg, exe, msi, pkg, rpm, tar, zip"
     echo "--package_type          : Package type                                e.g. jre, jdk"
@@ -28,7 +28,7 @@ infoFunction() {
     echo "--bitness               : Bitness                                     e.g. 32, 64"
     echo "--javafx_bundled        : With JavaFX                                 e.g. true, false"
     echo "--directly_downloadable : Directly downloadable                       e.g. true, false"
-    echo "--latest                : Latest                                      e.g. overall, per_distro"
+    echo "--latest                : Latest                                      e.g. overall, per_distro, available"
     echo "--dest                  : Destination                                 e.g. /Users/HanSolo"
     echo 
     echo "Usage example:"
